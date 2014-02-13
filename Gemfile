@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
-gem 'test-kitchen'
-gem 'kitchen-vagrant'
+group :test do
+  gem 'berkshelf'
+  gem 'test-kitchen'
+  gem 'kitchen-vagrant'
+  gem 'busser-serverspec'
+end
