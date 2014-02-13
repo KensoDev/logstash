@@ -23,10 +23,15 @@ Vagrant.configure("2") do |config|
     chef.data_bags_path = ENV['CHEF_DATA_BAGS']
     chef.encrypted_data_bag_secret_key_path = ENV['CHEF_SECRET_FILE']
     chef.json = {
+      'java' => {
+        'jdk_version' => 7,
+        'oracle' => { 'accept_oracle_download_terms' => true }
+      }
     }
     chef.run_list = [
-      'recipe[chef-solo-search]',
-      'recipe[logstash::default]'
+      'recipe[apt::default]',
+      'recipe[java::oracle]',
+      'recipe[logstash::server]'
     ]
   end
 end
