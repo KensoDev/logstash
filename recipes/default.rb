@@ -1,16 +1,18 @@
-group node[:logstash][:group]
+logstash = node[:logstash]
 
-user node[:logstash][:user] do
-  gid node[:logstash][:group]
+group logstash[:group]
+
+user logstash[:user] do
+  gid logstash[:group]
   system true
   shell '/bin/false'
   supports(manage_home: false)
 end
 
-default[:logstash].values_at(:basedir, :logdir).each do |dir|
+logstash.values_at(:basedir, :logdir).each do |dir|
   directory dir do
-    owner node[:logstash][:user]
-    group node[:logstash][:group]
+    owner logstash[:user]
+    group logstash[:group]
     mode '755'
     recursive true
     not_if { ::File.directory?(dir) }
