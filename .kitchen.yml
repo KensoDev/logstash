@@ -1,6 +1,11 @@
 ---
 driver:
   name: vagrant
+driver_config:
+  customize:
+    memory: 1024
+    cpus: 4
+    cpuexecutioncap: 70
 
 provisioner:
   name: chef_zero
