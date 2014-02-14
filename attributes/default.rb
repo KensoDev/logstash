@@ -1,6 +1,8 @@
 # Encoding: utf-8
 default['logstash']['basedir'] = '/opt/logstash'
 default['logstash']['logdir'] = ::File.join(node['logstash']['basedir'], 'log')
+default['logstash']['libdir'] = ::File.join(node['logstash']['basedir'], 'lib')
+default['logstash']['confdir'] = ::File.join(node['logstash']['basedir'], 'conf')
 
 default['logstash']['user'] = 'logstash'
 default['logstash']['group'] = 'logstash'

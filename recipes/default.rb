@@ -9,7 +9,7 @@ user logstash['user'] do
   supports(manage_home: false)
 end
 
-logstash.values_at('basedir', 'logdir').each do |dir|
+logstash.values_at('basedir', 'logdir', 'libdir', 'confdir').each do |dir|
   directory dir do
     owner logstash['user']
     group logstash['group']
