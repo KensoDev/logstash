@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'logstash::server' do
+describe 'logstash::indexer' do
   let(:logstash_user_name) { 'logstash' }
   let(:logstash_group_name) { 'logstash' }
   let(:base_dir) { '/opt/logstash' }
