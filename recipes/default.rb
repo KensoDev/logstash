@@ -34,4 +34,6 @@ end
 
 link ::File.join(lib_dir, 'logstash.jar') do
   to jar_path
+  owner logstash_user
+  group logstash_group
 end
