@@ -109,4 +109,28 @@ describe 'logstash::indexer' do
     end
   end
 
+  context 'config file' do
+    let(:logstash_file) { file_for('conf', 'indexer.conf') }
+
+    include_examples 'logstash owned file'
+
+    it 'has the default output' do
+      expected = <<-EOF
+input {
+  file {
+    type => "syslog"
+    path => ["/var/log/*.log", "/var/log/messages", "/var/log/syslog"]
+  }
+}
+output {
+  elasticsearch {
+    embedded => true
+  }
+}
+EOF
+
+      expect(logstash_file.content).to eq(expected)
+    end
+  end
+
 end
