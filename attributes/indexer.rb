@@ -19,20 +19,7 @@ default['logstash']['indexer']['config_data'] = {
   }
 }
 
-default['logstash']['indexer']['xms'] = '1024M'
-default['logstash']['indexer']['xmx'] = '1024M'
-default['logstash']['indexer']['java_opts'] = ''
-default['logstash']['indexer']['gc_opts'] = '-XX:+UseParallelOldGC'
-default['logstash']['indexer']['ipv4_only'] = false
-default['logstash']['indexer']['debug'] = false
-default['logstash']['indexer']['workers'] = 1
-
-default['logstash']['indexer']['enable_embedded_es'] = true
-
-default['logstash']['indexer']['inputs'] = []
-default['logstash']['indexer']['filters'] = []
-default['logstash']['indexer']['outputs'] = []
-
-default['logstash']['indexer']['web']['enable']  = false
-default['logstash']['indexer']['web']['address'] = '0.0.0.0'
-default['logstash']['indexer']['web']['port']    = '9292'
+default['logstash']['indexer']['daemon_name'] = 'logstash-indexer'
+default['logstash']['indexer']['jvm_opts'] = '-server -Xms1024M -Xmx1024M'
+default['logstash']['indexer']['es_path_home'] = node['logstash']['basedir']
+default['logstash']['indexer']['sincedb_dir'] = node['logstash']['logdir']

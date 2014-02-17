@@ -133,4 +133,15 @@ EOF
     end
   end
 
+  context 'service' do
+    let(:indexer_service) { service('logstash-indexer') }
+    it 'is running' do
+      expect(indexer_service).to be_running
+    end
+
+    it 'can be stopped' do
+      backend.run_command('service logstash-indexer stop 2> /dev/null || true')
+      expect(indexer_service).to_not be_running
+    end
+  end
 end
