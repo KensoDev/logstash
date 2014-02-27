@@ -3,10 +3,23 @@ require 'spec_helper'
 describe 'logstash::agent' do
   include_context 'common'
 
-  context 'service' do
-    it 'is running initially' do
-      expect(service('logstash-agent')).to be_running
-    end
+  it_behaves_like 'common install' do
+    let(:install_type) { 'agent' }
+    let(:expected_config) {
+<<-EOF
+input {
+  file {
+    type => "syslog"
+    path => ["/var/log/*.log", "/var/log/messages", "/var/log/syslog"]
+  }
+}
+output {
+  file {
+    path => "/opt/logstash/log/out.log"
+  }
+}
+EOF
+    }
   end
 
 end
