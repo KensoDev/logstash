@@ -12,4 +12,8 @@ default['logstash']['source_url'] =
   'https://download.elasticsearch.org/logstash/logstash/logstash-1.3.3-flatjar.jar'
 default['logstash']['checksum'] = '6ef146931eb8d4ad3f1b243922626923'
 
+default['logstash']['sincedb_dir'] = node['logstash']['logdir']
 
+# the default config uses embedded es, so we need to put its home path somewhere
+# that the logstash user can write...
+default['logstash']['indexer']['es_path_home'] = node['logstash']['basedir']
