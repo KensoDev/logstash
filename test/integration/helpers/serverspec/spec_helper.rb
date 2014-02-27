@@ -1,6 +1,8 @@
 require 'serverspec'
 require 'pathname'
 
+require 'common_context'
+
 include Serverspec::Helper::Exec
 include Serverspec::Helper::DetectOS
 
