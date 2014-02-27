@@ -1,4 +1,3 @@
-# todo
 include_recipe 'logstash::default'
 
 logstash = node['logstash']
