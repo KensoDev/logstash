@@ -33,3 +33,8 @@ template "/etc/init.d/#{daemon_name}" do
     sincedb_dir: sincedb_dir
   })
 end
+
+service daemon_name do
+  supports start: true, stop: true, restart: true
+  action [:enable, :start]
+end
