@@ -134,14 +134,30 @@ EOF
   end
 
   context 'service' do
-    let(:indexer_service) { service('logstash-indexer') }
-    it 'is running' do
-      expect(indexer_service).to be_running
+    def send_command(cmd)
+      backend.run_command("service logstash-indexer #{cmd} 2> /dev/null || true")
     end
 
-    it 'can be stopped' do
-      backend.run_command('service logstash-indexer stop 2> /dev/null || true')
-      expect(indexer_service).to_not be_running
+    let(:indexer_service) { service('logstash-indexer') }
+
+    context 'when started' do
+      before do
+        send_command(:start)
+      end
+
+      it 'is running' do
+        expect(indexer_service).to be_running
+      end
+    end
+
+    context 'when stopped' do
+      before do
+        send_command(:stop)
+      end
+
+      it 'can be stopped' do
+        expect(indexer_service).to_not be_running
+      end
     end
   end
 end
