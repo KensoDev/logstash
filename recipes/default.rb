@@ -17,7 +17,7 @@ log_file = install_attrs['log_file'] ||
 daemon_name = install_attrs['daemon_name'] || "logstash-#{install_type}"
 service_resource = "service[#{daemon_name}]"
 jvm_opts = "#{install_attrs['jvm_opts']} -Des.path.home=#{logstash['es_path_home']}"
-logstash_args = "-f #{config_file} -l #{log_file}"
+logstash_args = "-f #{config_file} -l #{log_file} " + install_attrs['logstash_args'].to_s
 sincedb_dir = logstash['sincedb_dir']
 
 group logstash_group

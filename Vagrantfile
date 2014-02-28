@@ -33,6 +33,7 @@ Vagrant.configure("2") do |config|
       chef.json = {
         'logstash' => {
           'indexer' => {
+            'logstash_args' => '-- web',
             'config_data' => {
               input: {
                 redis: {
