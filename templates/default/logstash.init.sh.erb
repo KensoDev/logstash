@@ -18,7 +18,7 @@ NAME=<%= @daemon_name %>
 DESC="$NAME daemon"
 USER=<%= @user %>
 DAEMON=/usr/bin/java
-DAEMON_ARGS="<%= @jvm_args %> -jar <%= @jar_path %> agent <%= @logstash_args %>"
+DAEMON_ARGS="<%= @jvm_opts %> -jar <%= @jar_path %> agent <%= @logstash_args %>"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 export SINCEDB_DIR=<%= @sincedb_dir %>

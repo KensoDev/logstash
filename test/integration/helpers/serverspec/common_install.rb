@@ -75,6 +75,30 @@ shared_examples 'common install' do
     let(:service_name) { "logstash-#{install_type}"}
     let(:logstash_service) { service(service_name) }
 
+    context 'service file' do
+      let(:service_file) { file("/etc/init.d/#{service_name}") }
+
+      it 'exists' do
+        expect(service_file).to be_a_file
+      end
+
+      it 'is owned by root' do
+        expect(service_file).to be_owned_by('root')
+      end
+
+      it 'is in group root' do
+        expect(service_file).to be_grouped_into('root')
+      end
+
+      it 'is mode 755' do
+        expect(service_file).to be_mode(755)
+      end
+
+      it 'has the jvm_opts' do
+        expect(service_file.content).to match(/#{Regexp.escape(jvm_opts)}/)
+      end
+    end
+
     def send_command(cmd)
       backend.run_command("service #{service_name} #{cmd} 2> /dev/null || true")
     end

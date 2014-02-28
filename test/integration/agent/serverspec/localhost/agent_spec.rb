@@ -20,6 +20,8 @@ output {
 }
 EOF
     }
+
+    let(:jvm_opts) { '-server -XX:+UseParallelOldGC -Xms384M -Xmx384M' }
   end
 
 end

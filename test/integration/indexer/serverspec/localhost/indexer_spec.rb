@@ -20,6 +20,8 @@ output {
 }
 EOF
     }
+
+    let(:jvm_opts) { '-server -Xms1024M -Xmx1024M' }
   end
 
 end
