@@ -16,4 +16,4 @@ default['logstash']['sincedb_dir'] = node['logstash']['logdir']
 
 # the default config uses embedded es, so we need to put its home path somewhere
 # that the logstash user can write...
-default['logstash']['indexer']['es_path_home'] = node['logstash']['basedir']
+default['logstash']['es_path_home'] = node['logstash']['basedir']

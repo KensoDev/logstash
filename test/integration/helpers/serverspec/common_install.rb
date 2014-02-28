@@ -97,6 +97,10 @@ shared_examples 'common install' do
       it 'has the jvm_opts' do
         expect(service_file.content).to match(/#{Regexp.escape(jvm_opts)}/)
       end
+
+      it 'sets the es.path.home' do
+        expect(service_file.content).to include('-Des.path.home=/opt/logstash')
+      end
     end
 
     def send_command(cmd)
