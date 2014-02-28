@@ -55,7 +55,7 @@ link jar_path do
 end
 
 file config_file do
-  content Chef::Logstash::Helpers.string_from_attrs(install_attrs['config_data'])
+  content Logstash::Helpers.string_from_attrs(install_attrs['config_data'])
   owner logstash_user
   group logstash_group
   mode '755'
