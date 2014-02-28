@@ -2,12 +2,8 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.hostname = "logstash"
-
   config.vm.box = "debian-7.2.0-amd64-chef"
   config.vm.box_url = "https://s3.amazonaws.com/linux-vbox/debian-7.2.0-amd64-chef.box"
-
-  config.vm.network :private_network, ip: "33.33.33.10"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -19,19 +15,81 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, :inline => "sudo echo \"alias ll='ls -al'\" > /etc/profile.d/ll.sh"
 
-  config.vm.provision :chef_solo do |chef|
-    chef.data_bags_path = ENV['CHEF_DATA_BAGS']
-    chef.encrypted_data_bag_secret_key_path = ENV['CHEF_SECRET_FILE']
-    chef.json = {
-      'java' => {
-        'jdk_version' => 7,
-        'oracle' => { 'accept_oracle_download_terms' => true }
+  config.vm.define 'redis' do |redis|
+    redis.vm.network :private_network, ip: '192.168.10.9'
+
+    redis.vm.provision :chef_solo do |chef|
+      chef.run_list = [
+        'recipe[redisio::install]',
+        'recipe[redisio::enable]'
+      ]
+    end
+  end
+
+  config.vm.define 'indexer' do |indexer|
+    indexer.vm.network :private_network, ip: '192.168.10.10'
+
+    indexer.vm.provision :chef_solo do |chef|
+      chef.json = {
+        'logstash' => {
+          'indexer' => {
+            'config_data' => {
+              input: {
+                redis: {
+                  host: '192.168.10.9',
+                  data_type: :list,
+                  key: :logstash,
+                  codec: :json
+                }
+              },
+
+              output: {
+                elasticsearch: {
+                  embedded: true
+                }
+              }
+            }
+          }
+        }
       }
-    }
-    chef.run_list = [
-      'recipe[apt::default]',
-      'recipe[java::oracle]',
-      'recipe[logstash::indexer]'
-    ]
+      chef.run_list = [
+        'recipe[apt]',
+        'recipe[java]',
+        'recipe[logstash::indexer]'
+      ]
+    end
+  end
+
+  config.vm.define 'agent' do |agent|
+    agent.vm.network :private_network, ip: '192.168.10.11'
+
+    agent.vm.provision :chef_solo do |chef|
+      chef.json = {
+        'logstash' => {
+          'agent' => {
+            'config_data' => {
+              input: {
+                file: {
+                  path: '/tmp/test.log'
+                }
+              },
+
+              output: {
+                redis: {
+                  host: '192.168.10.9',
+                  data_type: :list,
+                  key: :logstash
+                }
+              }
+            }
+          }
+        }
+      }
+      chef.run_list = [
+        'recipe[apt]',
+        'recipe[java]',
+        'recipe[logstash::agent]'
+      ]
+    end
   end
 end
