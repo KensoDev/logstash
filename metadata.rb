@@ -10,6 +10,6 @@ recipe 'logstash::default', 'Install and configure logstash'
 recipe 'logstash::indexer', 'Install and configure a logstash indexer'
 recipe 'logstash::agent', 'Install and configure a logstash agent'
 
-recommends 'java', '~> 1.19'
+recommends 'java', '~> 1.20'
 
 supports 'debian'
