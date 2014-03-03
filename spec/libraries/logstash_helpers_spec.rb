@@ -40,4 +40,67 @@ EOF
       expect(result).to eq(expected)
     end
   end
+
+  describe '.file_from_config' do
+    let(:input) do
+      [
+        {
+          file: {
+            type: 'testing',
+            paths: %w(some file paths/testing)
+          }
+        },
+        "if [something] == true {\n  do_something { test => true }\n}",
+        {
+          file: {
+            type: 'again',
+            path: 'my/file/path'
+          }
+        }
+      ]
+    end
+
+    let(:output) do
+      [
+        {
+          test: {
+            out: true
+          }
+        }
+      ]
+    end
+
+    subject(:result) { described_class.file_from_config(input, nil, output) }
+
+    it 'serializes the file' do
+      expected = <<-EOF
+input {
+  file {
+    type => "testing"
+    paths => ["some", "file", "paths/testing"]
+  }
+
+  if [something] == true {
+    do_something { test => true }
+  }
+
+  file {
+    type => "again"
+    path => "my/file/path"
+  }
+
+}
+
+output {
+  test {
+    out => true
+  }
+
+}
+
+EOF
+
+      expect(result).to eq(expected)
+    end
+  end
 end
