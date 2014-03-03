@@ -34,22 +34,19 @@ Vagrant.configure("2") do |config|
         'logstash' => {
           'indexer' => {
             'logstash_args' => '-- web',
-            'config_data' => {
-              input: {
-                redis: {
-                  host: '192.168.10.9',
-                  data_type: :list,
-                  key: :logstash,
-                  codec: :json
-                }
-              },
-
-              output: {
-                elasticsearch: {
-                  embedded: true
-                }
+            'config_input' => [{
+              redis: {
+                host: '192.168.10.9',
+                data_type: :list,
+                key: :logstash,
+                codec: :json
               }
-            }
+            }],
+            'config_output' => [{
+              elasticsearch: {
+                embedded: true
+              }
+            }]
           }
         }
       }
@@ -68,21 +65,18 @@ Vagrant.configure("2") do |config|
       chef.json = {
         'logstash' => {
           'agent' => {
-            'config_data' => {
-              input: {
-                file: {
-                  path: '/tmp/test.log'
-                }
-              },
-
-              output: {
-                redis: {
-                  host: '192.168.10.9',
-                  data_type: :list,
-                  key: :logstash
-                }
+            'config_input' => [{
+              file: {
+                path: '/tmp/test.log'
               }
-            }
+            }],
+            'config_output' => [{
+              redis: {
+                host: '192.168.10.9',
+                data_type: :list,
+                key: :logstash
+              }
+            }]
           }
         }
       }
