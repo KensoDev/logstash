@@ -55,7 +55,8 @@ link jar_path do
 end
 
 file config_file do
-  content Logstash::Helpers.string_from_attrs(install_attrs['config_data'])
+  content Logstash::Helpers.file_from_config(
+            *install_attrs.values_at('config_input', 'config_filter', 'config_output'))
   owner logstash_user
   group logstash_group
   mode '755'

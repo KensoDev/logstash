@@ -12,12 +12,16 @@ input {
     type => "syslog"
     path => ["/var/log/*.log", "/var/log/messages", "/var/log/syslog"]
   }
+
 }
+
 output {
   elasticsearch {
     embedded => true
   }
+
 }
+
 EOF
     }
 

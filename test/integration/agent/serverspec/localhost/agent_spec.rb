@@ -12,12 +12,16 @@ input {
     type => "syslog"
     path => ["/var/log/*.log", "/var/log/messages", "/var/log/syslog"]
   }
+
 }
+
 output {
   file {
     path => "/opt/logstash/log/out.log"
   }
+
 }
+
 EOF
     }
 
