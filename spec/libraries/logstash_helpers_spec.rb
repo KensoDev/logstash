@@ -31,7 +31,7 @@ input {
 }
 output {
   array => ["some", "array", "of", "strings"]
-  hash {
+  hash => {
     nested => true
   }
 }
@@ -64,7 +64,10 @@ EOF
       [
         {
           test: {
-            out: true
+            out: true,
+            hash: {
+              nested: true
+            }
           }
         }
       ]
@@ -94,11 +97,16 @@ input {
 output {
   test {
     out => true
+    hash => {
+      nested => true
+    }
   }
 
 }
 
 EOF
+
+puts result
 
       expect(result).to eq(expected)
     end

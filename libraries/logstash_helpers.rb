@@ -24,7 +24,9 @@ module Logstash
         case val
         when Hash
           nested = string_from_attrs(val, level + 1).chomp # get rid of last newline
-          " {\n#{nested}\n#{INDENT * level}}"
+          indent = INDENT * level
+          prefix = level == 0 ? '' : ' =>'
+          "#{prefix} {\n#{nested}\n#{indent}}"
         when String
           " => \"#{val}\""
         else
@@ -36,13 +38,15 @@ module Logstash
         if config && !config.empty?
           vals = config.map do |c|
             if c.is_a?(String)
-              c.gsub(/^/, "#{INDENT}") + "\n"
+              c + "\n"
             else
-              string_from_attrs(c, 1)
+              string_from_attrs(c)
             end
           end.join("\n")
 
-          "#{name} {\n#{vals}\n}\n\n"
+          indented = vals.gsub(/^(?!$)/, "#{INDENT}")
+
+          "#{name} {\n#{indented}\n}\n\n"
         else
           ''
         end
