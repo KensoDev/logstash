@@ -32,6 +32,7 @@ Vagrant.configure("2") do |config|
     indexer.vm.provision :chef_solo do |chef|
       chef.json = {
         'logstash' => {
+          'install_types' => ['indexer'],
           'indexer' => {
             'logstash_args' => '-- web',
             'config_input' => [{
@@ -53,7 +54,7 @@ Vagrant.configure("2") do |config|
       chef.run_list = [
         'recipe[apt]',
         'recipe[java]',
-        'recipe[logstash::indexer]'
+        'recipe[logstash]'
       ]
     end
   end
@@ -83,7 +84,7 @@ Vagrant.configure("2") do |config|
       chef.run_list = [
         'recipe[apt]',
         'recipe[java]',
-        'recipe[logstash::agent]'
+        'recipe[logstash]'
       ]
     end
   end

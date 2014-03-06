@@ -20,11 +20,21 @@ suites:
     run_list:
       - recipe[apt::default]
       - recipe[java]
-      - recipe[logstash::indexer]
+      - recipe[logstash]
     attributes:
+      logstash:
+        install_types: [indexer]
   - name: agent
     run_list:
       - recipe[apt::default]
       - recipe[java]
-      - recipe[logstash::agent]
+      - recipe[logstash]
     attributes:
+  - name: both
+    run_list:
+      - recipe[apt::default]
+      - recipe[java]
+      - recipe[logstash]
+    attributes:
+      logstash:
+        install_types: [agent, indexer]
