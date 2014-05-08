@@ -11,9 +11,10 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: debian-7.2.0
+  - name: debian-7.4
     driver:
-      box: debian-7.2.0-amd64-chef
+      box: debian-7.4.0-amd64-chef-11.12.2
+      box_url: https://s3.amazonaws.com/linux-vbox/debian-7.4.0-amd64-chef-11.12.2.box
 
 suites:
   - name: indexer
