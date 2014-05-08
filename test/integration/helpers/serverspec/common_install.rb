@@ -29,11 +29,6 @@ shared_examples 'common install' do
       include_examples 'logstash owned dir'
     end
 
-    context 'for the lib dir' do
-      let(:logstash_file) { file_for('lib') }
-      include_examples 'logstash owned dir'
-    end
-
     context 'for the log dir' do
       let(:logstash_file) { file_for('log') }
       include_examples 'logstash owned dir'
@@ -45,20 +40,10 @@ shared_examples 'common install' do
     end
   end
 
-  context 'downloads the jar' do
-    let(:logstash_file) { file_for('lib', 'logstash-1.3.3.jar') }
+  context 'untars the tarball' do
+    let(:logstash_file) { file_for('bin', 'logstash') }
 
     include_examples 'logstash owned file'
-  end
-
-  context 'creates a symlink' do
-    let(:logstash_file) { file_for('lib', 'logstash.jar') }
-
-    include_examples 'logstash owned'
-
-    it 'is linked to the downloaded jar' do
-      expect(logstash_file).to be_linked_to(base_rel_path('lib', 'logstash-1.3.3.jar'))
-    end
   end
 
   context 'config file' do
@@ -95,11 +80,8 @@ shared_examples 'common install' do
       end
 
       it 'has the jvm_opts' do
-        expect(service_file.content).to match(/#{Regexp.escape(jvm_opts)}/)
-      end
-
-      it 'sets the es.path.home' do
-        expect(service_file.content).to include('-Des.path.home=/opt/logstash')
+        regex = /LS_HEAP_SIZE=#{Regexp.escape(max_heap)}/
+        expect(service_file.content).to match(regex)
       end
     end
 

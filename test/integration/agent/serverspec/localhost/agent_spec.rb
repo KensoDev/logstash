@@ -25,7 +25,7 @@ output {
 EOF
     }
 
-    let(:jvm_opts) { '-server -XX:+UseParallelOldGC -Xms384M -Xmx384M' }
+    let(:max_heap) { '384M' }
   end
 
 end
