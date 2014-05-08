@@ -15,4 +15,5 @@ default['logstash']['indexer']['config_output'] =
   }
 }]
 
-default['logstash']['indexer']['jvm_opts'] = '-server -Xms1024M -Xmx1024M'
+default['logstash']['indexer']['max_heap_size'] = '1024M'
+default['logstash']['indexer']['gc_logging'] = false

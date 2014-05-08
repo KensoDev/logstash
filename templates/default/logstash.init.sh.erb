@@ -17,11 +17,20 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 NAME=<%= @daemon_name %>
 DESC="$NAME daemon"
 USER=<%= @user %>
-DAEMON=/usr/bin/java
-DAEMON_ARGS="<%= @jvm_opts %> -jar <%= @jar_path %> agent <%= @logstash_args %>"
+DAEMON=<%= ::File.join(@basedir, 'bin', 'logstash') %>
+DAEMON_ARGS="agent <%= @logstash_args %>"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
+
 export SINCEDB_DIR=<%= @sincedb_dir %>
+
+<% if @max_heap_size %>
+export LS_HEAP_SIZE=<%= @max_heap_size %>
+<% end %>
+
+<% if @gc_logging %>
+export LS_USE_GC_LOGGING=<%= @gc_logging %>
+<% end %>
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -46,9 +55,11 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --chuid $USER --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --chuid $USER --pidfile $PIDFILE \
+		--startas $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet --chuid $USER --pidfile $PIDFILE --make-pidfile --exec $DAEMON --background -- \
+	start-stop-daemon --start --quiet --chdir <%= @basedir %> --chuid $USER \
+		--pidfile $PIDFILE --make-pidfile --startas $DAEMON --background -- \
 		$DAEMON_ARGS \
 		|| return 2
 	# Add code here, if necessary, that waits for the process to be ready
@@ -105,18 +116,9 @@ case "$1" in
 		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
 	esac
 	;;
-  status)
-	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	status)
+	status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" && exit 0 || exit $?
 	;;
-  #reload|force-reload)
-	#
-	# If do_reload() is not implemented then leave this commented out
-	# and leave 'force-reload' as an alias for 'restart'.
-	#
-	#log_daemon_msg "Reloading $DESC" "$NAME"
-	#do_reload
-	#log_end_msg $?
-	#;;
   restart|force-reload)
 	#
 	# If the "reload" option is implemented then remove the
@@ -140,8 +142,7 @@ case "$1" in
 	esac
 	;;
   *)
-	#echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
 	exit 3
 	;;
 esac
