@@ -37,6 +37,9 @@ end
 
 bash 'extract tarball' do
   cwd basedir
+  user logstash_user
+  group logstash_group
+
   code "tar xzf #{download_tar_path} --strip-components 1"
 
   # gotta be a better check for this...
