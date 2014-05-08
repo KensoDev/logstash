@@ -25,7 +25,7 @@ output {
 EOF
     }
 
-    let(:jvm_opts) { '-server -Xms1024M -Xmx1024M' }
+    let(:max_heap) { '1024M' }
   end
 
 end

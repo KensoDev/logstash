@@ -15,5 +15,5 @@ default['logstash']['agent']['config_output'] =
   }
 }]
 
-default['logstash']['agent']['jvm_opts'] =
-  '-server -XX:+UseParallelOldGC -Xms384M -Xmx384M'
+default['logstash']['agent']['max_heap_size'] = '384M'
+default['logstash']['agent']['gc_logging'] = false
