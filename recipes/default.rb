@@ -1,10 +1,11 @@
 logstash = node['logstash']
 logstash_user = logstash['user']
 logstash_group = logstash['group']
+version = logstash['version']
 
 basedir = logstash['basedir']
 
-local_tar_name = 'logstash.tar.gz'
+local_tar_name = "logstash-#{version}.tar.gz"
 download_tar_path = ::File.join(Chef::Config[:file_cache_path], local_tar_name)
 
 group logstash_group
@@ -33,6 +34,7 @@ remote_file download_tar_path do
   source logstash['source_url']
   checksum logstash['checksum']
   action :create_if_missing
+  notifies :run, "bash[extract tarball]", :immediately
 end
 
 bash 'extract tarball' do
@@ -42,8 +44,7 @@ bash 'extract tarball' do
 
   code "tar xzf #{download_tar_path} --strip-components 1"
 
-  # gotta be a better check for this...
-  not_if { ::File.directory?(::File.join(basedir, 'bin')) }
+  action :nothing # wait for callback from tar download
 end
 
 logstash['install_types'].uniq.each do |install_type|
