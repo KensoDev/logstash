@@ -4,6 +4,7 @@ default['logstash']['logdir'] = ::File.join(node['logstash']['basedir'], 'log')
 default['logstash']['confdir'] = ::File.join(node['logstash']['basedir'], 'conf')
 
 default['logstash']['install_types'] = %w[agent]
+default['logstash']['install_plugins'] = true
 
 default['logstash']['user'] = 'logstash'
 default['logstash']['group'] = 'logstash'

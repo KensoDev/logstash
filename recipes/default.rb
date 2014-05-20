@@ -34,7 +34,7 @@ remote_file download_tar_path do
   source logstash['source_url']
   checksum logstash['checksum']
   action :create_if_missing
-  notifies :run, "bash[extract tarball]", :immediately
+  notifies :run, 'bash[extract tarball]', :immediately
 end
 
 bash 'extract tarball' do
@@ -45,6 +45,20 @@ bash 'extract tarball' do
   code "tar xzf #{download_tar_path} --strip-components 1"
 
   action :nothing # wait for callback from tar download
+
+  if logstash['install_plugins']
+    notifies :run, 'bash[install plugins]', :immediately
+  end
+end
+
+bash 'install plugins' do
+  cwd basedir
+  user logstash_user
+  group logstash_group
+
+  code 'bin/plugin install contrib'
+
+  action :nothing # also from callback from extract
 end
 
 logstash['install_types'].uniq.each do |install_type|
