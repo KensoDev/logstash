@@ -6,9 +6,9 @@ module Logstash
     class << self
       def file_from_config(input, filter, output)
         res = ''
-        res << string_from_config_array('input', input)
-        res << string_from_config_array('filter', filter)
-        res << string_from_config_array('output', output)
+        res << string_from_config_hash('input', input)
+        res << string_from_config_hash('filter', filter)
+        res << string_from_config_hash('output', output)
         res
       end
 
@@ -34,15 +34,23 @@ module Logstash
         end
       end
 
-      def string_from_config_array(name, config)
-        if config && !config.empty?
-          vals = config.map do |c|
-            if c.is_a?(String)
-              c + "\n"
+      def string_from_config_hash(name, config_hash)
+        if config_hash && !config_hash.empty?
+          vals = config_hash.map do |_, conf|
+            if conf.is_a?(String)
+              conf + "\n"
             else
-              string_from_attrs(c)
+              # in this case, it better be a Hash, but its node attributes,
+              # so lets make a copy
+              conf = conf.dup
+              enabled = conf.delete('enabled')
+
+              # nil is the default...  we only care about other falsy values
+              if enabled.nil? || enabled
+                string_from_attrs(conf)
+              end
             end
-          end.join("\n")
+          end.compact.join("\n")
 
           indented = vals.gsub(/^(?!$)/, "#{INDENT}")
 

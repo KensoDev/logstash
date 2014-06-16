@@ -25,12 +25,39 @@ suites:
     attributes:
       logstash:
         install_types: [indexer]
+        indexer:
+          config_input:
+            syslog:
+              file:
+                type: syslog
+                path:
+                  - /var/log/*.log
+                  - /var/log/messages
+                  - /var/log/syslog
+          config_output:
+            es_embedded:
+              elasticsearch:
+                embedded: true
   - name: agent
     run_list:
       - recipe[apt::default]
       - recipe[java]
       - recipe[logstash]
     attributes:
+      logstash:
+        agent:
+          config_input:
+            syslog:
+              file:
+                type: syslog
+                path:
+                  - /var/log/*.log
+                  - /var/log/messages
+                  - /var/log/syslog
+          config_output:
+            logfile:
+              file:
+                path: /opt/logstash/log/out.log
   - name: both
     run_list:
       - recipe[apt::default]
@@ -39,3 +66,29 @@ suites:
     attributes:
       logstash:
         install_types: [agent, indexer]
+        indexer:
+          config_input:
+            syslog:
+              file:
+                type: syslog
+                path:
+                  - /var/log/*.log
+                  - /var/log/messages
+                  - /var/log/syslog
+          config_output:
+            es_embedded:
+              elasticsearch:
+                embedded: true
+        agent:
+          config_input:
+            syslog:
+              file:
+                type: syslog
+                path:
+                  - /var/log/*.log
+                  - /var/log/messages
+                  - /var/log/syslog
+          config_output:
+            logfile:
+              file:
+                path: /opt/logstash/log/out.log
