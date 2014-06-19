@@ -99,7 +99,8 @@ logstash['install_types'].uniq.each do |install_type|
       logstash_args: logstash_args,
       sincedb_dir: logstash['sincedb_dir'],
       max_heap_size: install_attrs['max_heap_size'],
-      gc_logging: install_attrs['gc_logging']
+      gc_logging: install_attrs['gc_logging'],
+      java_opts: install_attrs['java_opts']
     })
     notifies :restart, service_resource
   end
