@@ -61,6 +61,15 @@ bash 'install plugins' do
   action :nothing # also from callback from extract
 end
 
+logstash['pattern_files'].each do |filename, patterns|
+  file "#{logstash['basedir']}/patterns/#{filename}" do
+    mode 0644
+    owner logstash_user
+    group logstash_group
+    content patterns.join("\n")
+  end
+end
+
 logstash['install_types'].uniq.each do |install_type|
   install_attrs = logstash[install_type]
 

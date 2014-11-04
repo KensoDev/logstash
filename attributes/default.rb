@@ -16,3 +16,12 @@ default['logstash']['checksum'] =
   'a1db8eda3d8bf441430066c384578386601ae308ccabf5d723df33cee27304b4'
 
 default['logstash']['sincedb_dir'] = node['logstash']['logdir']
+
+# entries should assume the following pattern:
+#
+# 'filename' => [
+#   'name_a pattern',
+#   'name_b pattern'
+# ]
+#
+default['logstash']['pattern_files'] = {}
