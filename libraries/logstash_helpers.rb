@@ -8,7 +8,7 @@ module Logstash
         res = ''
         res << string_from_config_hash('input', input)
         filter_section = LogstashConf.section_to_str(filter)
-        res << "filter {\n#{filter_section}\n}\n\n" if filter_section #string_from_config_hash('filter', filter)
+        res << "filter {\n#{filter_section}\n}\n\n" if filter_section && !filter_section.empty? #string_from_config_hash('filter', filter)
         res << string_from_config_hash('output', output)
         res
       end
