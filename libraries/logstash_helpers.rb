@@ -7,8 +7,10 @@ module Logstash
       def file_from_config(input, filter, output)
         res = ''
         res << string_from_config_hash('input', input)
-        filter_section = LogstashConf.section_to_str(filter)
-        res << "filter {\n#{filter_section}\n}\n\n" if filter_section && !filter_section.empty? #string_from_config_hash('filter', filter)
+        if filter
+          filter_section = LogstashConf.section_to_str(filter)
+          res << "filter {\n#{filter_section}\n}\n\n" if filter_section && !filter_section.empty? #string_from_config_hash('filter', filter)
+        end
         res << string_from_config_hash('output', output)
         res
       end
